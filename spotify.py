@@ -28,7 +28,7 @@ def mk_query(base_url, parameters):
     
 def get_matching_songs(line):    
     
-    matched_strings = {}
+    matched_songs = {}
     matched_words = set()
     anchors = set()
     
@@ -49,7 +49,7 @@ def get_matching_songs(line):
         try:
             query, href = to_queue.get_nowait()
             if href:
-                matched_strings[query] = href
+                matched_songs[query] = href
                 words = query.split()
                 for word in words:
                     matched_words.add(word)
@@ -60,7 +60,7 @@ def get_matching_songs(line):
         except Queue.Empty:
             break
 
-    return matched_strings, matched_words, anchors
+    return matched_songs, matched_words, anchors
 
 
 class Worker(th.Thread):
@@ -109,46 +109,46 @@ class Worker(th.Thread):
         self.to_queue.put((query, None))
 
 
-def accept_strings(line, strings, matched_words, anchors):
+def accept_songs(line, matched_songs, matched_words, anchors):
         
     line = line.split()
     
-    accepted_strings = []
+    accepted_songs = []
     
     current_line = ''
     for i, word in enumerate(line):
         if word in matched_words:
             try_line = (current_line + ' ' + word).strip()
-            if any(string.startswith(try_line) for string in strings):
+            if any(song.startswith(try_line) for song in matched_songs):
                 if not i == len(line) - 1:
                     next_word = line[i+1]
                     if word in anchors \
                         and (next_word in matched_words 
                              and next_word not in anchors) \
                         and len(current_line) > 0:
-                        accepted_strings.append(current_line)
+                        accepted_songs.append(current_line)
                         current_line = word
                     else:
                         current_line = try_line
                 else:
-                    accepted_strings.append(try_line)
+                    accepted_songs.append(try_line)
             else:
                 if len(current_line) > 0:
-                    accepted_strings.append(current_line)
+                    accepted_songs.append(current_line)
                 current_line = word
                 if i == len(line) - 1:
-                    accepted_strings.append(word)
+                    accepted_songs.append(word)
         else:
             if len(current_line) > 0:
-                accepted_strings.append(current_line)
+                accepted_songs.append(current_line)
             current_line = ''
     
-    return accepted_strings
+    return [(s, matched_songs[s]) for s in accepted_songs]
 
 if __name__ == '__main__':
     line = sys.argv[1].lower()
     answer = get_matching_songs(line)
-    for s in accept_strings(line, *answer):
-        print s
+    for song, url in accept_songs(line, *answer):
+        print '{} @ {}'.format(song, url)
         
 
