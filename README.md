@@ -15,7 +15,7 @@ As far as the rules of engagement are concerned:
 2. It uses the threading module to issue searches against the API (in a single thread application we would wait a long time for the results).
 3. It is case insensitive with regard to the capitalization of the query.
 
-Now, when a line is given to the program (let's say the line is "it's sunny today"), what the script does is split this line into multiple queries
+Now, when a line is given to the program (let's say the line is "it's sunny outside"), what the script does is split this line into multiple queries
 like so:
 
 1. it's
