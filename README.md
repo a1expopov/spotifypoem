@@ -4,7 +4,7 @@ Basic Description
 
 The program takes a query string on the command line, like so
   
-    alex@lambda:~/spotify$ python -m spotify "if i can't let it go out of my mind."
+    alex@lambda:~/spotify$ python -m spotify "if i can't let it go out of my mind"
   
 and prints out a list of matched song names and their urls.
 
@@ -27,6 +27,7 @@ like so:
 
 And then tries to find a matching song title for each of the above-generated strings. It stops looking after requesting a maximum of 2 pages.
 The reason why I do this is because I try to get as close to the optimal solution as possible, which requires trying out all of the subcomponents of the query.
+Another thing worth mentioning, is that the script is sensitive to punctuation in the query; i.e., "hello!" in the query would not match a song title with the name "hello".
 
 Once the script discovers whether each of 1-6 has a matching song title, it then tries to return to the user as few song titles as possible.
 
