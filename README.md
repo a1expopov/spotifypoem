@@ -4,7 +4,7 @@ Basic Description
 
 The program takes a query string on the command line, like so
   
-    alex@lambda:~/spotify$ ./spotify.py "if i can't let it go out of my mind."
+    alex@lambda:~/spotify$ python -m spotify "if i can't let it go out of my mind."
   
 and prints out a list of matched song names and their urls.
 
