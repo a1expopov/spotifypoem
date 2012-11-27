@@ -145,6 +145,7 @@ def accept_songs(line, matched_songs, matched_words, anchors):
     
     return [(s, matched_songs[s]) for s in accepted_songs]
 
+
 if __name__ == '__main__':
     line = sys.argv[1].lower()
     answer = get_matching_songs(line)
